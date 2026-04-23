@@ -11,7 +11,7 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(express.static(path.join(__dirname, '..', 'dist')));
-app.get('*', (_req, res) => res.sendFile(path.join(__dirname, '..', 'dist', 'index.html')));
+app.get('/{*path}', (_req, res) => res.sendFile(path.join(__dirname, '..', 'dist', 'index.html')));
 
 io.on('connection', (socket) => {
   socket.on('join', (room: string) => socket.join(room));

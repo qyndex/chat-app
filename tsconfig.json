@@ -20,5 +20,14 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "src/test/**",
+    "src/**/*.test.*",
+    "src/**/*.spec.*",
+    "e2e/**",
+    "tests/**"
   ]
 }
