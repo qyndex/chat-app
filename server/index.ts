@@ -15,7 +15,9 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
 
 // Prefer service role key for server-side operations; fall back to anon key
-const supabase = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey);
+const supabase = supabaseUrl
+  ? createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey || 'placeholder')
+  : null;
 
 if (!supabaseUrl) {
   console.warn('SUPABASE_URL is not set — database persistence disabled.');
@@ -45,6 +47,10 @@ io.use(async (socket, next) => {
   }
 
   try {
+    if (!supabase) {
+      socket.data.userId = 'demo-user';
+      return next();
+    }
     const { data: { user }, error } = await supabase.auth.getUser(token);
     if (error || !user) {
       return next(new Error('Authentication failed'));
